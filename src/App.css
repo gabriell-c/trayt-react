@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --default-color: #4E00FF;
+    --light-purple: #804AFF;
+    --dark-purple: #3600B5;
+    --dark: #141318;
+    --white: #F9F9F9;
+    --dark-secondary: #28262e;
+}
+
+body{
+    background-color: var(--dark);
+    color:#f9f9f9; 
+    font-family: 'Open Sans', sans-serif;
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #333;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--default-color);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background-color: var(--dark-purple);
+}
