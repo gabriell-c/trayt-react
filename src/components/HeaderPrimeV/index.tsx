@@ -24,8 +24,6 @@ export default function Index() {
     let random = IDs[Math.ceil(Math.random() * IDs.length)]
     let result = api.find(e=>e?.id === random)?.thumb_img;
 
-    console.log(random)
-
     return (
         <S.Container style={{backgroundImage: `url(${result})`,
         backgroundPosition: 'center',
