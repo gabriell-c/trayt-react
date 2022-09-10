@@ -31,9 +31,6 @@ export default function Index() {
             {loading &&
                 <Loading />
             }
-            <S.Info>
-                <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Star%2B_logo.svg/2560px-Star%2B_logo.svg.png' alt='logo' />
-            </S.Info>
             <S.Bg></S.Bg>
         </S.Container>
     )

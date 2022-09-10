@@ -155,6 +155,10 @@ export const SelectType = styled.div`
     svg{
         color: var(--white);
     }
+
+    @media screen and (max-width: 500px){
+        width: 150px;
+    }
 `;
 
 export const SelectOrder = styled.div`
@@ -165,6 +169,10 @@ export const SelectOrder = styled.div`
 
     svg{
         color: var(--white);
+    }
+
+    @media screen and (max-width: 500px){
+        width: 150px;
     }
 `;
 

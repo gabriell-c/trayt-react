@@ -66,14 +66,14 @@ export const HeaderLeft= styled.div`
 export const ItemBody = styled.div`
     width: 100%;
     padding: 1em 0;
+    overflow: hidden;
     p{
         font-weight: 500;
         margin-bottom: 2em;
     }
 
     img{
-        width: 100%;
-        border-radius: 4px;
+        width: 170%;
     }
 `;
 
@@ -104,16 +104,15 @@ export const ModalArea = styled.div`
 `;
 
 export const ModalItem = styled.div`
-    width: 70%;
-    height: 80vh;
+    width: 80%;
+    max-height: 83vh;
     background: var(--dark);
     position: relative;
     z-index: 12;
-    border-radius: 5px;
+    overflow: hidden;
 
     img{
-        width: 100%;
-        height: 100%;
+        width: 170%;
         z-index: 13;
     }
 `;
