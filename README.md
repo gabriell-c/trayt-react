@@ -29,7 +29,7 @@ O front end com React consiste em mostra os trailers, por trás das câmeras, et
 ### etc...
 ---
 
-<h2><a href='https://github.com/gabriell-c/trayt-node' target='_blank'/>API</a> utilizada</h2>
+<h2><a href='https://github.com/gabriell-c/trayt-node'/>API</a> utilizada</h2>
 
 <h2>Instalando</h2>
 
