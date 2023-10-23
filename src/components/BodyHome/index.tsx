@@ -31,15 +31,23 @@ export default function Index() {
         setLoading(false)
     };
 
-    const fetchtrailersBodyJSON = async () => {
-        const response = await fetch('http://apitrayt.infinityfreeapp.com');
-        const trailersBody = await response.json();
-        setApi(trailersBody)
+   function fetchTrailersBodyJSON() {
+    fetch('https://apitrayt.infinityfreeapp.com')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Não foi possível obter os dados da API');
+            }
+            return response.json();
+        })
+        .then(trailersBody => {
+            setApi(trailersBody);
+        })
+        .catch(error => {
+            console.error('Erro na solicitação da API:', error);
+            alert('Algo deu errado na solicitação da API');
+        });
+}
 
-        if(!trailersBody){
-            alert("Deu errado no fetch")
-        }
-    }
     useEffect(()=>{
         if(valueSearch === '' && valueSelect !== 'Crescente' && valueSelect !== 'Decrescente' && valueSelect !== 'Padrão'){
             handleSearch()
