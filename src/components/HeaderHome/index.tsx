@@ -11,7 +11,7 @@ export default function Index() {
     useEffect(() => {
         async function fetchTrailersJSON() {
             setLoading(true);
-            const response = await fetch('https://trailersapi.herokuapp.com/api/trailers');
+            const response = await fetch('http://apitrayt.infinityfreeapp.com/TrailersApi/');
             const trailers = await response.json();
             setApi(trailers);
             setLoading(false);
