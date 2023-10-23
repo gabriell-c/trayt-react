@@ -32,7 +32,7 @@ export default function Index() {
     };
 
     const fetchtrailersBodyJSON = async () => {
-        const response = await fetch('https://trailersapi.herokuapp.com/api/all');
+        const response = await fetch('http://apitrayt.infinityfreeapp.com');
         const trailersBody = await response.json();
         setApi(trailersBody)
 
