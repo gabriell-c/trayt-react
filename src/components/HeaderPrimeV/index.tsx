@@ -10,7 +10,7 @@ export default function Index() {
     useEffect(() => {
         async function fetchTrailersJSON() {
             setLoading(true);
-            const response = await fetch('https://trailersapi.herokuapp.com/api/primevideo');
+            const response = await fetch('https://trayt-node-1.onrender.com/api/primevideo');
             const trailers = await response.json();
             setApi(trailers);
             setLoading(false);

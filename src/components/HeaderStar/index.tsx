@@ -10,7 +10,7 @@ export default function Index() {
     useEffect(() => {
         async function fetchTrailersJSON() {
             setLoading(true);
-            const response = await fetch('https://trailersapi.herokuapp.com/api/starplus');
+            const response = await fetch('https://trayt-node-1.onrender.com/api/starplus');
             const trailers = await response.json();
             setApi(trailers);
             setLoading(false);

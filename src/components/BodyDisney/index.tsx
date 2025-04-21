@@ -38,7 +38,7 @@ export default function Index() {
     };
 
     const fetchtrailersNetflixJSON = async () => {
-        const response = await fetch('https://trailersapi.herokuapp.com/api/disneyplus');
+        const response = await fetch('https://trayt-node-1.onrender.com/api/disneyplus');
         const trailersNetflix = await response.json();
         setApi(trailersNetflix)
     }

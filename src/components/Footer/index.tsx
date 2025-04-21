@@ -5,7 +5,7 @@ export default function Index() {
     return (
         <S.Container>
             <img src={LogoImgFooter} alt='Logo' />
-            <p>© 2022 todos direitos reservados | feito por <a href='https://github.com/gabriell-c' target='_blank' > Gabriel Cardoso</a>.</p>
+            <p>© 2025 todos direitos reservados | feito por <a href='https://github.com/gabriell-c' target='_blank' > Gabriel Cardoso</a>.</p>
         </S.Container>
     )
 }

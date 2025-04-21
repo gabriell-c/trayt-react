@@ -4,7 +4,7 @@ import LoadindBody from '../loadingBody';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select'
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import sortDefault from '../../assets/sort default.png';
 import sortCres from '../../assets/crescente.png';
@@ -14,11 +14,11 @@ import * as S from './style';
 
 export default function Index() {
 
-    document.title = "Trayt"
+    document.title = "Trayt";
 
-    const [ api, setApi ] = useState<ApiType[]>([]);
+    const [api, setApi] = useState<ApiType[]>([]);
     const [loading, setLoading] = useState(false);
-    const [order, setOrder] = useState<ApiType[]>()
+    const [order, setOrder] = useState<ApiType[]>([]);
     const [valueSelect, setValueSelect] = useState('');
     const [valueSearch, setValueSearch] = useState('');
     const [arraySearch, setArraySearch] = useState<ApiType[]>([]);
@@ -28,11 +28,11 @@ export default function Index() {
 
     const handleChange = (e: SelectChangeEvent) => {
         setValueSelect(e.target.value as string);
-        setLoading(false)
+        setLoading(false);
     };
 
-   function fetchTrailersBodyJSON() {
-    fetch('https://apitrayt.infinityfreeapp.com')
+    function fetchTrailersBodyJSON() {
+        fetch('https://trayt-node-1.onrender.com/api/all')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Não foi possível obter os dados da API');
@@ -41,52 +41,44 @@ export default function Index() {
         })
         .then(trailersBody => {
             setApi(trailersBody);
+            setArraySearch(trailersBody);
         })
         .catch(error => {
             console.error('Erro na solicitação da API:', error);
             alert('Algo deu errado na solicitação da API');
         });
-}
+    }
 
-    useEffect(()=>{
-        if(valueSearch === '' && valueSelect !== 'Crescente' && valueSelect !== 'Decrescente' && valueSelect !== 'Padrão'){
-            handleSearch()
-        }
-    }, [api])
+    useEffect(() => {
+        fetchTrailersBodyJSON();
+    }, []);
 
-    useEffect(()=>{
- 
-        fetchtrailersBodyJSON()
-        if(valueSelect === 'Crescente'){
-            setOrder(arraySearch.sort((a, b)=>{
-                if (a.name < b.name) return -1;
-                if (a.name > b.name) return 1;
-                return 0;
-            }))
-        } 
-        if(valueSelect === 'Decrescente'){
-            setOrder(arraySearch.sort((a, b)=>{
-                if (a.name > b.name) return -1;
-                if (a.name < b.name) return 1;
-                return 0;
-            }))
-        }   
-        if(valueSelect === 'Padrão'){
-            setOrder(arraySearch.sort((a, b)=>{
-                if (a.id < b.id) return -1;
-                if (a.id > b.id) return 1;
-                return 0;
-            }))
+    useEffect(() => {
+        if (valueSearch === '' && valueSelect !== 'Crescente' && valueSelect !== 'Decrescente' && valueSelect !== 'Padrão') {
+            handleSearch();
         }
-    }, [valueSelect])
+    }, [valueSearch, valueSelect]);
+
+    useEffect(() => {
+        if (valueSelect === 'Crescente') {
+            setOrder([...arraySearch].sort((a, b) => a.name.localeCompare(b.name)));
+        }
+        if (valueSelect === 'Decrescente') {
+            setOrder([...arraySearch].sort((a, b) => b.name.localeCompare(a.name)));
+        }
+        if (valueSelect === 'Padrão') {
+            setOrder([...arraySearch].sort((a, b) => a.id - b.id));
+        }
+    }, [valueSelect, arraySearch]);
 
     const filterItems = (search: string) => {
-        return api.filter(e => e.name.toLowerCase().indexOf(search.toLowerCase()) > -1);
+        return api.filter(e => e.name.toLowerCase().includes(search.toLowerCase()));
     };
 
-    const handleSearch=(): any=>{
-        setArraySearch(filterItems(valueSearch))
-    }
+    const handleSearch = () => {
+        setArraySearch(filterItems(valueSearch));
+    };
+
     
   return (
     <S.Container>

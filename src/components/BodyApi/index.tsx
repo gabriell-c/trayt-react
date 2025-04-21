@@ -31,7 +31,7 @@ export default function Index() {
 
     const fetchApiInitial = async () => {
         setLoading(true)
-        const response = await fetch('https://trailersapi.herokuapp.com/');
+        const response = await fetch('https://trayt-node-1.onrender.com');
         const listApi = await response.json();
         setApi(listApi);
         setLoading(false)

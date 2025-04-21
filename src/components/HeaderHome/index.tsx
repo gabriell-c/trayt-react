@@ -11,7 +11,7 @@ export default function Index() {
     useEffect(() => {
         async function fetchTrailersJSON() {
             setLoading(true);
-            const response = await fetch('http://apitrayt.infinityfreeapp.com/TrailersApi/');
+            const response = await fetch('https://trayt-node-1.onrender.com/api/all');
             const trailers = await response.json();
             setApi(trailers);
             setLoading(false);
