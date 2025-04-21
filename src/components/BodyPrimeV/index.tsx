@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import ApiType from '../Type';
 import LoadindBody from '../loadingBody';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select'
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -14,106 +14,89 @@ import * as S from './style';
 
 export default function Index() {
 
-    document.title = "Trayt - Prime Vídeo"
+    document.title = "Trayt - Prime Vídeo";
 
-    const [ api, setApi ] = useState<ApiType[]>([]);
+    const [api, setApi] = useState<ApiType[]>([]);
     const [loading, setLoading] = useState(false);
-    const [order, setOrder] = useState<ApiType[]>()
+    const [order, setOrder] = useState<ApiType[]>([]);
     const [valueSelectOrder, setValueSelectOrder] = useState('');
     const [valueSelectType, setValueSelectType] = useState('');
     const [valueSearch, setValueSearch] = useState('');
     const [arraySearch, setArraySearch] = useState<ApiType[]>([]);
-    const [title, setTitle ] = useState('Trailers/Teasers');
+    const [title, setTitle] = useState('Trailers/Teasers');
     const [hiddeModal, setHiddeModal] = useState(false);
     const [valueModal, setValueModal] = useState<ApiType>();
     const [loadingModal, setLoadingModal] = useState(true);
 
     const handleChangeOrder = (e: SelectChangeEvent) => {
         setValueSelectOrder(e.target.value as string);
-        setLoading(false)
+        setLoading(false);
     };
 
     const handleChange = (e: SelectChangeEvent) => {
         setValueSelectType(e.target.value);
     };
 
-    const fetchtrailersNetflixJSON = async () => {
+    const fetchtrailersPrimeJSON = async () => {
         const response = await fetch('https://trayt-node-1.onrender.com/api/primevideo');
-        const trailersNetflix = await response.json();
-        setApi(trailersNetflix)
-    }
-
-    useEffect(()=>{
-        setOrder(arraySearch) 
-    }, [])
-
-    useEffect(()=>{
-        if(order?.length === 0){
-            handleSearch()
-        }
-
-        if(valueSelectType === ''){
-            setTitle("Trailers/Teasers")
-        }
-        if(valueSelectType === 'outros'){
-            setTitle("Outros")
-        }
-        if(valueSelectType === 'por_tras_das_cameras'){
-            setTitle("Por Trás das Câmeras")
-        }
-        if(valueSelectType === 'trailer_oficial'){
-            setTitle("Trailers/Teasers oficiais")
-        }
-    })  
-
-    const callApi=()=>{
-        fetchtrailersNetflixJSON()
-        setOrder(arraySearch) 
-        if(valueSelectOrder === 'Crescente'){
-            setOrder(arraySearch.sort((a, b)=>{
-                if (a.name < b.name) return -1;
-                if (a.name > b.name) return 1;
-                return 0;
-            }))
-        } 
-        if(valueSelectOrder === 'Decrescente'){
-            setOrder(arraySearch.sort((a, b)=>{
-                if (a.name > b.name) return -1;
-                if (a.name < b.name) return 1;
-                return 0;
-            }))
-        }   
-        if(valueSelectOrder === 'Padrão'){
-            setOrder(arraySearch.sort((a, b)=>{
-                if (a.id < b.id) return -1;
-                if (a.id > b.id) return 1;
-                return 0;
-            }))
-        }
-        
-        if(valueSelectType === undefined){
-            setOrder(arraySearch)
-        }
-        if(valueSelectType === 'outros'){
-            setOrder(arraySearch.filter(e=>e.category === 'outros'))
-        }
-        if(valueSelectType === 'trailer_oficial'){
-            setOrder(arraySearch.filter(e=>e.category === 'trailer_oficial'))
-        }
-    }
-
-    useEffect(()=>{
-        callApi()
-         
-    }, [api])
-
-    const filterItems = (search: string) => {
-        return api?.filter(e => e.name.toLowerCase().indexOf(search.toLowerCase()) > -1);
+        const trailersPrime = await response.json();
+        setApi(trailersPrime);
     };
 
-    const handleSearch=(): any=>{
-        setArraySearch(filterItems(valueSearch))
-    }    
+    useEffect(() => {
+        fetchtrailersPrimeJSON();
+    }, []);
+
+    useEffect(() => {
+        let filtered = [...api];
+
+        // Filtro por busca
+        if (valueSearch) {
+            filtered = filtered.filter(e =>
+                e.name.toLowerCase().includes(valueSearch.toLowerCase())
+            );
+        }
+
+        // Filtro por categoria
+        if (valueSelectType === 'outros') {
+            filtered = filtered.filter(e => e.category === 'outros');
+        }
+        if (valueSelectType === 'por_tras_das_cameras') {
+            filtered = filtered.filter(e => e.category === 'por_tras_das_cameras');
+        }
+        if (valueSelectType === 'trailer_oficial') {
+            filtered = filtered.filter(e => e.category === 'trailer_oficial');
+        }
+
+        // Ordenação
+        if (valueSelectOrder === 'Crescente') {
+            filtered.sort((a, b) => a.name.localeCompare(b.name));
+        }
+        if (valueSelectOrder === 'Decrescente') {
+            filtered.sort((a, b) => b.name.localeCompare(a.name));
+        }
+        if (valueSelectOrder === 'Padrão') {
+            filtered.sort((a, b) => a.id - b.id);
+        }
+
+        setArraySearch(filtered);
+        setOrder(filtered);
+    }, [api, valueSearch, valueSelectOrder, valueSelectType]);
+
+    useEffect(() => {
+        if (valueSelectType === '') {
+            setTitle("Trailers/Teasers");
+        }
+        if (valueSelectType === 'outros') {
+            setTitle("Outros");
+        }
+        if (valueSelectType === 'por_tras_das_cameras') {
+            setTitle("Por Trás das Câmeras");
+        }
+        if (valueSelectType === 'trailer_oficial') {
+            setTitle("Trailers/Teasers oficiais");
+        }
+    }, [valueSelectType]); 
 
   return (
     <S.Container>
@@ -122,7 +105,9 @@ export default function Index() {
             <S.InputSearch>
                 <TextField color='secondary' fullWidth id="outlined-search" value={valueSearch} onChange={(e)=>setValueSearch(e.target.value)} label="Pesquisar"
                 type="search" variant="outlined" />
-                <button onClick={handleSearch}><FaSearch /> </button>
+                <button onClick={() => setValueSearch(valueSearch)}>
+                    <FaSearch />
+                </button>
             </S.InputSearch>
 
             <S.SelectType>

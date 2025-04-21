@@ -73,12 +73,12 @@ export default function Index() {
                             <h1>{item.title}</h1>
                         </S.HeaderLeft>
                         <S.ButtonNavi>
-                            <button><MdContentCopy style={{color: click ? '#09e33c' : '#f9f9f9', transition: 'all ease .2s', filter: `${click ? 'drop-shadow(0 0 5px #09e33c)' : 'drop-shadow(0 0 10px #f9f9f950)' }`}} onClick={() => {navigator.clipboard.writeText(`https://trailersapi.herokuapp.com${item.url}`)
+                            <button><MdContentCopy style={{color: click ? '#09e33c' : '#f9f9f9', transition: 'all ease .2s', filter: `${click ? 'drop-shadow(0 0 5px #09e33c)' : 'drop-shadow(0 0 10px #f9f9f950)' }`}} onClick={() => {navigator.clipboard.writeText(`https://trayt-node-1.onrender.com${item.url}`)
                                 setClick(true)
                                 setTimeout(()=>setClick(false), 3000)
                                 }} /></button>
                             <Tooltip title={item.title} disableFocusListener >
-                                <a target='_blank' href={`https://trailersapi.herokuapp.com${item.url}`}><button><FiExternalLink /></button></a>
+                                <a target='_blank' href={`https://trayt-node-1.onrender.com${item.url}`}><button><FiExternalLink /></button></a>
                             </Tooltip>
                         </S.ButtonNavi>
                     </S.ItemHeader>

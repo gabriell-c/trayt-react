@@ -13,26 +13,23 @@ import { FaSearch } from "react-icons/all";
 import * as S from './style';
 
 export default function Index() {
-
     document.title = "Trayt - Netflix";
 
-    const [ api, setApi ] = useState<ApiType[]>([]);
+    const [api, setApi] = useState<ApiType[]>([]);
     const [loading, setLoading] = useState(false);
-    const [order, setOrder] = useState<ApiType[]>();
+    const [order, setOrder] = useState<ApiType[]>([]);
     const [valueSelectOrder, setValueSelectOrder] = useState('');
     const [valueSelectType, setValueSelectType] = useState('');
     const [valueSearch, setValueSearch] = useState('');
     const [arraySearch, setArraySearch] = useState<ApiType[]>([]);
-    const [title, setTitle ] = useState('Trailers/Teasers');
+    const [title, setTitle] = useState('Trailers/Teasers');
     const [hiddeModal, setHiddeModal] = useState(false);
     const [valueModal, setValueModal] = useState<ApiType>();
     const [loadingModal, setLoadingModal] = useState(true);
 
     const handleChangeOrder = (e: SelectChangeEvent) => {
         setValueSelectOrder(e.target.value as string);
-        setLoading(false)
     };
-    
 
     const handleChange = (e: SelectChangeEvent) => {
         setValueSelectType(e.target.value);
@@ -41,86 +38,57 @@ export default function Index() {
     const fetchtrailersNetflixJSON = async () => {
         const response = await fetch('https://trayt-node-1.onrender.com/api/netflix');
         const trailersNetflix = await response.json();
-        setApi(trailersNetflix)
-    }
-
-    useEffect(()=>{
-        setOrder(arraySearch) 
-        
-    }, [])
-
-    useEffect(()=>{
-        if(order?.length === 0){
-            handleSearch()
-        }
-        setTitle(valueSelectType)
-
-        if(valueSelectType === ''){
-            setTitle("Trailers/Teasers")
-        }
-        if(valueSelectType === 'outros'){
-            setTitle("Outros")
-        }
-        if(valueSelectType === 'por_tras_das_cameras'){
-            setTitle("Por Trás das Câmeras")
-        }
-        if(valueSelectType === 'trailer_oficial'){
-            setTitle("Trailers/Teasers oficiais")
-        }
-    })  
-
-    const callApi=()=>{
-        fetchtrailersNetflixJSON()
-        setOrder(arraySearch) 
-        if(valueSelectOrder === 'Crescente'){
-            setOrder(arraySearch.sort((a, b)=>{
-                if (a.name < b.name) return -1;
-                if (a.name > b.name) return 1;
-                return 0;
-            }))
-        } 
-        if(valueSelectOrder === 'Decrescente'){
-            setOrder(arraySearch.sort((a, b)=>{
-                if (a.name > b.name) return -1;
-                if (a.name < b.name) return 1;
-                return 0;
-            }))
-        }   
-        if(valueSelectOrder === 'Padrão'){
-            setOrder(arraySearch.sort((a, b)=>{
-                if (a.id < b.id) return -1;
-                if (a.id > b.id) return 1;
-                return 0;
-            }))
-        }
-        
-        if(valueSelectType === undefined){
-            setOrder(arraySearch)
-            
-        }
-        if(valueSelectType === 'outros'){
-            setOrder(arraySearch.filter(e=>e.category === 'outros'))
-        }
-        if(valueSelectType === 'por_tras_das_cameras'){
-            setOrder(arraySearch.filter(e=>e.category === 'por_tras_das_cameras'))
-        }
-        if(valueSelectType === 'trailer_oficial'){
-            setOrder(arraySearch.filter(e=>e.category === 'trailer_oficial'))
-        }
-    }
-
-    useEffect(()=>{
-        callApi()
-         
-    }, [api])
-
-    const filterItems = (search: string) => {
-        return api?.filter(e => e.name.toLowerCase().indexOf(search.toLowerCase()) > -1);
+        setApi(trailersNetflix);
     };
 
-    const handleSearch=(): any=>{
-        setArraySearch(filterItems(valueSearch))
-    }    
+    // Fetch inicial dos dados
+    useEffect(() => {
+        fetchtrailersNetflixJSON();
+    }, []);
+
+    // Atualiza arraySearch com base no tipo
+    useEffect(() => {
+        let filtered = [...api];
+
+        if (valueSelectType === 'outros') {
+            filtered = filtered.filter(e => e.category === 'outros');
+            setTitle('Outros');
+        } else if (valueSelectType === 'por_tras_das_cameras') {
+            filtered = filtered.filter(e => e.category === 'por_tras_das_cameras');
+            setTitle('Por Trás das Câmeras');
+        } else if (valueSelectType === 'trailer_oficial') {
+            filtered = filtered.filter(e => e.category === 'trailer_oficial');
+            setTitle('Trailers/Teasers oficiais');
+        } else {
+            setTitle('Trailers/Teasers');
+        }
+
+        setArraySearch(filtered);
+    }, [valueSelectType, api]);
+
+    // Filtro por busca
+    useEffect(() => {
+        const results = api.filter(e =>
+            e.name.toLowerCase().includes(valueSearch.toLowerCase())
+        );
+        setArraySearch(results);
+    }, [valueSearch]);
+
+    // Ordenação
+    useEffect(() => {
+        let sorted = [...arraySearch];
+
+        if (valueSelectOrder === 'Crescente') {
+            sorted.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (valueSelectOrder === 'Decrescente') {
+            sorted.sort((a, b) => b.name.localeCompare(a.name));
+        } else if (valueSelectOrder === 'Padrão') {
+            sorted.sort((a, b) => a.id - b.id);
+        }
+
+        setOrder(sorted);
+    }, [valueSelectOrder, arraySearch]);
+ 
 
   return (
     <S.Container>
@@ -129,7 +97,9 @@ export default function Index() {
            <S.InputSearch>
             <TextField  color='secondary' fullWidth id="outlined-search" value={valueSearch} onChange={(e)=>setValueSearch(e.target.value)} label="Pesquisar"
                 type="search" variant="outlined" />
-                <button onClick={handleSearch}><FaSearch /> </button>
+                <button onClick={() => setValueSearch(valueSearch)}>
+                <FaSearch />
+                </button>
            </S.InputSearch>
 
             <S.SelectType>
